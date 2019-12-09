@@ -1,0 +1,45 @@
+{
+    "advertising": {
+        "isConnectable": true,
+        "manufacturerData": [Object
+        ],
+        "serviceData": [Object
+        ],
+        "serviceUUIDs": [Array
+        ],
+        "txPowerLevel": -2147483648
+    },
+    "id": "27:49:54:02:86:BC",
+    "name": null,
+    "rssi": -89
+},
+{
+    "advertising": {
+        "isConnectable": true,
+        "manufacturerData": [Object
+        ],
+        "serviceData": [Object
+        ],
+        "serviceUUIDs": [Array
+        ],
+        "txPowerLevel": -2147483648
+    },
+    "id": "36:F0:53:8A:36:FD",
+    "name": null,
+    "rssi": -84
+},
+{
+    "advertising": {
+        "isConnectable": true,
+        "manufacturerData": [Object
+        ],
+        "serviceData": [Object
+        ],
+        "serviceUUIDs": [Array
+        ],
+        "txPowerLevel": -2147483648
+    },
+    "id": "24:C7:4B:D8:69:50",
+    "name": null,
+    "rssi": -86
+}
