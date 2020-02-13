@@ -1,7 +1,8 @@
 
-import React, {Component} from 'react';
-import {View, 
-    StyleSheet, 
+import React, { Component } from 'react';
+import {
+    View,
+    StyleSheet,
     Image,
     TextInput,
     ScrollView,
@@ -10,10 +11,11 @@ import {View,
     TouchableOpacity,
     Keyboard,
     ActivityIndicator,
-    Dimensions} from 'react-native';
+    Dimensions
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {loggingInUser, resetLoginErrorMessage} from '../actions';
-import {connect} from 'react-redux';
+import { loggingInUser, resetLoginErrorMessage } from '../actions';
+import { connect } from 'react-redux';
 
 
 class loginPage extends Component {
@@ -21,53 +23,48 @@ class loginPage extends Component {
 
     constructor() {
         super();
-     
+
     }
 
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener(
-          'keyboardDidShow',
-          this._keyboardDidShow,
+            'keyboardDidShow',
+            this._keyboardDidShow,
         );
         this.keyboardDidHideListener = Keyboard.addListener(
-          'keyboardDidHide',
-          this._keyboardDidHide,
+            'keyboardDidHide',
+            this._keyboardDidHide,
         );
         this.props.resetLoginErrorMessage();
-      }
-    
-      componentWillUnmount() {
+    }
+
+    componentWillUnmount() {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
         this.props.resetLoginErrorMessage();
-      }
-    
-      _keyboardDidShow = () => {
+    }
 
-        const {password, passwordIsFocused, code, codeIsFocused, staff, staffIsFocused} = this.state;
+    _keyboardDidShow = () => {
+
+        const { password, passwordIsFocused, code, codeIsFocused } = this.state;
 
         if (passwordIsFocused) {
             this.passwordValid(password, 'show');
-            
+
         }
 
         if (codeIsFocused) {
             this.schoolCodeValid(code, 'show')
         }
 
-        if (staffIsFocused) {
-            this.staffValid(staff, 'show')
-        }
-
         this.props.resetLoginErrorMessage();
-       
-      }
-    
-      _keyboardDidHide = () => {
-       this.staffValid(this.state.staff , 'hide');
-       this.schoolCodeValid(this.state.code, 'hide');
-       this.passwordValid(this.state.password, 'hide');
-      }
+
+    }
+
+    _keyboardDidHide = () => {
+        this.schoolCodeValid(this.state.code, 'hide');
+        this.passwordValid(this.state.password, 'hide');
+    }
 
     state = {
         code: '100100100',
@@ -76,25 +73,23 @@ class loginPage extends Component {
         codeText: '',
         codeIsFocused: false,
         passwordText: '',
-        passwordIsFocused:false,
-        staffText: '',
-        staffIsFocused: false,
+        passwordIsFocused: false,
         secureText: true
     }
-    
+
 
     onLoginPress() {
 
-       this.props.resetLoginErrorMessage();
+        this.props.resetLoginErrorMessage();
 
 
-       if (this.schoolCodeValid() && this.staffValid() && this.passwordValid()) {
-        const {code, password, staff} = this.state;
-        this.props.loggingInUser(code,staff,password);
-       }
+        if (this.schoolCodeValid() && this.passwordValid()) {
+            const { code, password } = this.state;
+            this.props.loggingInUser(code, password);
+        }
 
-      
-    
+
+
     }
 
     schoolCodeValid(codeV, action) {
@@ -104,11 +99,11 @@ class loginPage extends Component {
 
             this.setState({
                 codeText: '',
-            
+
             })
 
         }
-        else if  (action === 'check'){
+        else if (action === 'check') {
 
             this.setState({
                 code: codeV
@@ -135,8 +130,8 @@ class loginPage extends Component {
         } else {
 
 
-            const {code} = this.state;
-           
+            const { code } = this.state;
+
             if (code === null || code === '') {
                 this.setState({
                     codeText: 'Cannot Be Empty',
@@ -145,7 +140,7 @@ class loginPage extends Component {
                     staffIsFocused: false
                 })
                 return false;
-            }   
+            }
 
             else if (isNaN(code)) {
                 this.setState({
@@ -176,7 +171,7 @@ class loginPage extends Component {
         if (action === 'hide') {
             this.setState({
                 passwordText: '',
-              
+
             })
         }
         else if (action === 'check') {
@@ -184,20 +179,20 @@ class loginPage extends Component {
             this.setState({
                 password: passwordV
             })
-    
+
             if (passwordV === '') {
                 this.setState({
                     passwordText: 'Cannot be empty'
                 })
-            }else {
+            } else {
                 this.setState({
                     passwordText: ''
                 })
             }
 
-        }else {
+        } else {
 
-            const {password} = this.state;
+            const { password } = this.state;
 
             if (password === '') {
                 this.setState({
@@ -207,7 +202,7 @@ class loginPage extends Component {
                     staffIsFocused: false
                 })
                 return false;
-            }else {
+            } else {
                 this.setState({
                     passwordText: '',
                     codeIsFocused: false,
@@ -221,65 +216,19 @@ class loginPage extends Component {
 
     }
 
-    staffValid(staffV, action) {
 
-        if (action === 'hide') {
 
-            this.setState({
-                staffText: '',
-             
-            })
-
-        }
-        else if (action === 'check') {
-            this.setState({
-                staff: staffV
-            })
-    
-            if (staffV === '') {
-                this.setState({
-                    staffText: 'Cannot Be empty'
-                })
-            }else {
-                this.setState({
-                    staffText: ''
-                })
-            }
-        } else {
-
-            const {staff} = this.state;
-            if (staff === '') {
-                this.setState({
-                    staffText: 'Cannot Be empty',
-                    codeIsFocused: false,
-                    passwordIsFocused: false,
-                    staffIsFocused: true
-                })
-                return false;
-            }else {
-                this.setState({
-                    staffText: '',
-                    codeIsFocused: false,
-                    passwordIsFocused: false,
-                    staffIsFocused: true
-                })
-                return true;
-            }
-        }
-
-    }
-
-    belowSchoolCode () {
-        const {codeText} = this.state;
+    belowSchoolCode() {
+        const { codeText } = this.state;
         const {
             belowInput,
         } = styles
 
         if (codeText !== '') {
             return (
-                <View style = {belowInput}>
-                    <Text style = {{color: 'red'}}>
-                            {codeText}
+                <View style={belowInput}>
+                    <Text style={{ color: 'red' }}>
+                        {codeText}
                     </Text>
                 </View>
             );
@@ -287,39 +236,24 @@ class loginPage extends Component {
     }
 
 
-    belowPassword () {
-        const {passwordText} = this.state;
+    belowPassword() {
+        const { passwordText } = this.state;
         const {
             belowInput,
         } = styles
 
         if (passwordText !== '') {
             return (
-                <View style = {belowInput}>
-                    <Text style = {{color: 'red'}}>
-                            {passwordText}
+                <View style={belowInput}>
+                    <Text style={{ color: 'red' }}>
+                        {passwordText}
                     </Text>
                 </View>
             );
         }
     }
 
-    belowStaff () {
-        const {staffText} = this.state;
-        const {
-            belowInput,
-        } = styles
 
-        if (staffText !== '') {
-            return (
-                <View style = {belowInput}>
-                    <Text style = {{color: 'red'}}>
-                            {staffText}
-                    </Text>
-                </View>
-            );
-        }
-    }
 
     toggleEye() {
         this.setState({
@@ -329,54 +263,54 @@ class loginPage extends Component {
     }
 
     eyeOrSlash() {
-        const {secureText} = this.state;
-        const {iconSideView} = styles;
+        const { secureText } = this.state;
+        const { iconSideView } = styles;
 
         if (secureText == false) {
-            return(
-                <TouchableOpacity style = {iconSideView}
-                    onPress = {this.toggleEye.bind(this)}
-                    >
-                    <Ionicons name = 'md-eye' size = {height * 0.05} color = 'white'/>
+            return (
+                <TouchableOpacity style={iconSideView}
+                    onPress={this.toggleEye.bind(this)}
+                >
+                    <Ionicons name='md-eye' size={height * 0.05} color='white' />
                 </TouchableOpacity>
             );
 
-        }else {
+        } else {
             return (
-                <TouchableOpacity style = {iconSideView}
-                    onPress = {this.toggleEye.bind(this)}
-                    >
-                    <Ionicons name = 'md-eye-off' size = {height * 0.05} color = 'white'/>
+                <TouchableOpacity style={iconSideView}
+                    onPress={this.toggleEye.bind(this)}
+                >
+                    <Ionicons name='md-eye-off' size={height * 0.05} color='white' />
                 </TouchableOpacity>
             );
         }
     }
 
     buttonOrSpinner() {
-        const {loading} = this.props;
-        const {topUpButtonView, topUpbutton, topUpButtonFontSize} = styles;
+        const { loading } = this.props;
+        const { topUpButtonView, topUpbutton, topUpButtonFontSize } = styles;
 
         if (loading) {
 
-            return(
-                <View style = {topUpButtonView}>
+            return (
+                <View style={topUpButtonView}>
 
                     <ActivityIndicator
-                     size = {height * 0.08} 
-                     color = '#E68100'
-                        />
-               
+                        size={height * 0.08}
+                        color='#E68100'
+                    />
+
                 </View>
 
             );
 
-        }else {
-            return(
-                <View style = {topUpButtonView}>
-                    <TouchableOpacity style = {topUpbutton}
-                        onPress = {this.onLoginPress.bind(this)}
-                        >
-                        <Text style = {topUpButtonFontSize}>
+        } else {
+            return (
+                <View style={topUpButtonView}>
+                    <TouchableOpacity style={topUpbutton}
+                        onPress={this.onLoginPress.bind(this)}
+                    >
+                        <Text style={topUpButtonFontSize}>
                             LOGIN
                         </Text>
                     </TouchableOpacity>
@@ -388,13 +322,13 @@ class loginPage extends Component {
     }
 
     errorMessageOrNot() {
-        const {error} = this.props;
-        const {errorMessageText, errorMessageView} = styles;
+        const { error } = this.props;
+        const { errorMessageText, errorMessageView } = styles;
 
         if (error !== '') {
-            return(
-                <View style = {errorMessageView}>
-                    <Text style = {errorMessageText}>
+            return (
+                <View style={errorMessageView}>
+                    <Text style={errorMessageText}>
                         {error}
                     </Text>
                 </View>
@@ -410,91 +344,72 @@ class loginPage extends Component {
             mainContainer,
             scrollViewContainer,
             twinInputView,
-            iconSideView,
+
             textInputSideView,
-            topUpbutton,
-            topUpButtonFontSize,
-            topUpButtonView,
+
             logoImageView,
             textInputStyle
         } = styles;
-        const  {height, width} = Dimensions.get('screen');
+        const { height, width } = Dimensions.get('screen');
 
         let heightD = width * 0.45;
 
-        return(
-            <ImageBackground source={require('../images/firstimage.jpg')} 
-                style= {{...mainContainer, ...{height:height, width:width}}}
+        return (
+            <ImageBackground source={require('../images/firstimage.jpg')}
+                style={{ ...mainContainer, ...{ height: height, width: width } }}
                 blurRadius={5}
+            >
+                <ScrollView contentContainerStyle={scrollViewContainer}
+                    showsHorizontalScrollIndicator={false}
                 >
-                <ScrollView contentContainerStyle = {scrollViewContainer} 
-                    showsHorizontalScrollIndicator = {false}
-                    >
 
 
-                    <View style = {logoImageView}>
+                    <View style={logoImageView}>
 
                         <Image source={require('../images/logo.jpg')}
-                                    style={{height: heightD, width: heightD, resizeMode: 'center', borderRadius: heightD*2}}
-                            />
+                            style={{ height: heightD, width: heightD, resizeMode: 'center', borderRadius: heightD * 2 }}
+                        />
 
                     </View>
 
-                    <View style = {twinInputView}>
-                        <View style = {textInputSideView}>
+                    <View style={twinInputView}>
+                        <View style={textInputSideView}>
                             <TextInput
-                                placeholder = "School Code"
-                                keyboardType = 'numeric'
-                                placeholderTextColor = {'rgba(255, 255, 255, 0.38)'}
-                                value = {this.state.code}
-                                onChangeText = {value => this.schoolCodeValid(value, 'check')}
-                                onFocus = {value => this.schoolCodeValid(value, 'show')}
-                                onBlur = {value => this.schoolCodeValid(value, 'hide')}
-                                style = {textInputStyle}
-                                
-                                />
+                                placeholder="School Code"
+                                keyboardType='numeric'
+                                placeholderTextColor={'rgba(255, 255, 255, 0.38)'}
+                                value={this.state.code}
+                                onChangeText={value => this.schoolCodeValid(value, 'check')}
+                                onFocus={value => this.schoolCodeValid(value, 'show')}
+                                onBlur={value => this.schoolCodeValid(value, 'hide')}
+                                style={textInputStyle}
+
+                            />
 
                         </View>
                     </View>
 
                     {this.belowSchoolCode()}
 
-                     <View style = {twinInputView}>
-                        <View style = {textInputSideView}>
+
+
+                    <View style={twinInputView}>
+                        <View style={textInputSideView}>
                             <TextInput
-                                placeholder = "StaffID"
-                                placeholderTextColor = {'rgba(255, 255, 255, 0.38)'}
-                                value = {this.state.staff}
-                                onChangeText = {value => this.staffValid(value, 'check')}
-                                onFocus = {value => this.staffValid(value, 'show')}
-                                onBlur = {value => this.staffValid(value, 'hide')}
-                                style = {textInputStyle}
-                               
-                                />
+                                placeholder="*********"
+                                placeholderTextColor={'rgba(255, 255, 255, 0.38)'}
+                                value={this.state.password}
+                                onChangeText={value => this.passwordValid(value, 'check')}
+                                onFocus={value => this.passwordValid(value, 'show')}
+                                onBlur={value => this.passwordValid(value, 'hide')}
+                                secureTextEntry={this.state.secureText}
+                                style={textInputStyle}
+                            />
 
                         </View>
+                        {this.eyeOrSlash()}
                     </View>
 
-                    {this.belowStaff()}
-
-                     <View style = {twinInputView}>
-                        <View style = {textInputSideView}>
-                            <TextInput
-                                placeholder = "*********"
-                                placeholderTextColor = {'rgba(255, 255, 255, 0.38)'}
-                                value = {this.state.password}
-                                onChangeText = {value => this.passwordValid(value, 'check')}
-                                onFocus = {value => this.passwordValid(value, 'show')}
-                                onBlur = {value => this.passwordValid(value, 'hide')}
-                                secureTextEntry = {this.state.secureText}
-                                style = {textInputStyle}
-                                />
-
-                        </View>
-                      {this.eyeOrSlash()}
-                    </View>
-
-                    {this.belowPassword()}
 
                     {this.errorMessageOrNot()}
 
@@ -507,25 +422,25 @@ class loginPage extends Component {
         );
     }
 }
-const mapStateToProps = ({loginReducer}) => {
+const mapStateToProps = ({ loginReducer }) => {
 
-    const {code, password, loading, error} =  loginReducer;
+    const { code, password, loading, error } = loginReducer;
 
-    return  {code, password, loading, error};
+    return { code, password, loading, error };
 
 };
 
-export default connect (mapStateToProps, {loggingInUser, resetLoginErrorMessage})(loginPage);
+export default connect(mapStateToProps, { loggingInUser, resetLoginErrorMessage })(loginPage);
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
 
     mainContainer: {
-       flex: 1
+        flex: 1
     },
     scrollViewContainer: {
-       paddingTop: height * 0.05
+        paddingTop: height * 0.05
     },
 
     twinInputView: {
@@ -539,7 +454,7 @@ const styles = StyleSheet.create({
         borderRadius: width * 0.03
     },
     iconSideView: {
-        flex:1,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
@@ -569,7 +484,7 @@ const styles = StyleSheet.create({
         paddingRight: width * 0.05,
         paddingVertical: height * 0.05,
         marginVertical: height * 0.025
-       
+
     },
     topUpButtonFontSize: {
         color: 'white',
@@ -580,7 +495,7 @@ const styles = StyleSheet.create({
     logoImageView: {
         marginBottom: height * 0.08,
         alignItems: 'center',
-        
+
     },
     belowInput: {
         paddingHorizontal: width * 0.1
